@@ -7,5 +7,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: '/ТВОЙ_РЕПОЗИТОРИЙ/', // не забудь указать имя репозитория для gh-pages
+  base: '/Portfolio-VoronovMV/',
 })
