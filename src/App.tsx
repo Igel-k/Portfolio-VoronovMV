@@ -1,6 +1,7 @@
 import { portfolioSections, documents } from './data';
 import ProjectCard from './components/ProjectCard';
 import Navigation from './components/Navigation';
+import ThemeToggle from './components/ThemeToggle';
 
 export default function App() {
   return (
@@ -10,6 +11,9 @@ export default function App() {
         <p className="text-navy/80 text-lg md:text-xl max-w-2xl">
           Компьютерный инжиниринг, CAE-моделирование и оптимизация конструкций.
         </p>
+        <div className="mt-2 md:mt-4">
+          <ThemeToggle />
+        </div>
       </header>
 
       <Navigation />
