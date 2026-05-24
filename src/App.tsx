@@ -1,5 +1,6 @@
 import { portfolioSections, documents } from './data';
 import ProjectCard from './components/ProjectCard';
+import Navigation from './components/Navigation';
 
 export default function App() {
   return (
@@ -11,28 +12,7 @@ export default function App() {
         </p>
       </header>
 
-      <nav className="mb-16 bg-slate-50 p-6 rounded-xl border border-navy/5">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-navy/50 mb-4">
-          Навигация по разделам
-        </h2>
-        <ul className="flex flex-col gap-3">
-          {portfolioSections.map((section) => (
-            <li key={`nav-${section.id}`}>
-              <a
-                href={`#${section.id}`}
-                className="text-navy hover:text-teal font-medium transition-colors"
-              >
-                {section.title}
-              </a>
-            </li>
-          ))}
-          <li>
-            <a href="#reports" className="text-navy hover:text-teal font-medium transition-colors">
-              Научные статьи и технические отчёты
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <Navigation />
 
       <div className="space-y-20">
         {portfolioSections.map((section) => (
