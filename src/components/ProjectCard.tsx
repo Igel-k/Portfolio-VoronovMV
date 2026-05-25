@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Project } from '../types';
 
 interface ProjectCardProps {
@@ -8,29 +8,33 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   const lightVideoRef = useRef<HTMLVideoElement>(null);
   const darkVideoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const handleMouseEnter = () => {
     if (project.videoLight && lightVideoRef.current) {
-      const playPromise = lightVideoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((e) => {
-          if (e.name !== 'AbortError') console.error(e);
-        });
-      }
+      lightVideoRef.current.play().catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
     }
     if (project.videoDark && darkVideoRef.current) {
-      const playPromise = darkVideoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((e) => {
-          if (e.name !== 'AbortError') console.error(e);
-        });
-      }
+      darkVideoRef.current.play().catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
     }
   };
 
   const handleMouseLeave = () => {
     if (lightVideoRef.current) lightVideoRef.current.pause();
     if (darkVideoRef.current) darkVideoRef.current.pause();
+  };
+
+  const togglePlay = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isPlaying) {
+      handleMouseLeave();
+    } else {
+      handleMouseEnter();
+    }
   };
 
   const hasVideo = project.videoLight && project.videoDark;
@@ -41,7 +45,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       onMouseLeave={handleMouseLeave}
       className="group flex flex-col relative h-full"
     >
-      <div className="w-full aspect-video relative z-10 -mb-2">
+      <div className="w-full aspect-video relative z-10 -mb-2 cursor-pointer" onClick={togglePlay}>
         {hasVideo ? (
           <>
             <video
@@ -51,6 +55,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               muted
               playsInline
               preload="auto"
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
               className="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 opacity-100 dark:opacity-0"
             />
 
@@ -61,6 +67,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               muted
               playsInline
               preload="auto"
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
               className="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 opacity-0 dark:opacity-100"
             />
           </>
@@ -73,10 +81,20 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         )}
 
         {hasVideo && (
-          <div className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity flex items-center justify-center pointer-events-none z-20">
+          <div className="hidden md:flex absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity items-center justify-center pointer-events-none z-20">
             <span className="text-xs font-semibold tracking-wider uppercase bg-white/80 dark:bg-ansys-dark/80 px-3 py-1.5 rounded-md backdrop-blur-sm shadow-sm text-teal">
               Наведите для анимации
             </span>
+          </div>
+        )}
+
+        {hasVideo && !isPlaying && (
+          <div className="flex md:hidden absolute inset-0 items-center justify-center pointer-events-none z-20 bg-navy/5 dark:bg-black/20 transition-all duration-300">
+            <div className="bg-white/90 dark:bg-ansys-dark/90 p-3 rounded-full backdrop-blur-sm shadow-md text-teal">
+              <svg className="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
           </div>
         )}
       </div>
