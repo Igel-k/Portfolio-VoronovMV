@@ -1,15 +1,15 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-navy: #1E3A8A;
-  --color-teal: #0D9488;
-  --color-ansys-dark: #0F172A;
-  --color-ansys-card: #1E293B;
+  --color-navy: #1e3a8a;
+  --color-teal: #0d9488;
+  --color-ansys-dark: #0f172a;
+  --color-ansys-card: #1e293b;
+  --color-ansys-card-light: #f1f5f9;
 }
 
-/* Применяем базовые цвета к телу страницы с плавной анимацией */
 body {
-  @apply bg-white text-navy dark:bg-ansys-dark dark:text-slate-300 transition-colors duration-300;
+  @apply bg-white text-navy dark:bg-ansys-dark dark:text-slate-300 transition-colors duration-300 font-sans;
 }
