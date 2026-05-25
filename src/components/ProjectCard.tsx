@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Project } from '../types';
 
 interface ProjectCardProps {
@@ -5,18 +6,82 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const lightVideoRef = useRef<HTMLVideoElement>(null);
+  const darkVideoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    if (project.videoLight && lightVideoRef.current) {
+      const playPromise = lightVideoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((e) => {
+          if (e.name !== 'AbortError') console.error(e);
+        });
+      }
+    }
+    if (project.videoDark && darkVideoRef.current) {
+      const playPromise = darkVideoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((e) => {
+          if (e.name !== 'AbortError') console.error(e);
+        });
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (lightVideoRef.current) lightVideoRef.current.pause();
+    if (darkVideoRef.current) darkVideoRef.current.pause();
+  };
+
+  const hasVideo = project.videoLight && project.videoDark;
+
   return (
-    <div className="border border-navy/10 dark:border-slate-700/50 rounded-xl overflow-hidden shadow-sm hover:shadow-lg dark:shadow-none dark:hover:shadow-teal/20 transition-all duration-300 group flex flex-col bg-white dark:bg-ansys-card">
-      <div className="bg-slate-100 dark:bg-ansys-dark aspect-video flex items-center justify-center relative overflow-hidden">
-        <span className="text-navy/30 font-mono text-sm">mp4 video placeholder</span>
-        <div className="absolute inset-0 bg-navy/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <span className="text-white font-bold bg-teal/90 backdrop-blur-sm px-6 py-2 rounded-full shadow-md text-sm tracking-wide">
-            Play Animation
-          </span>
-        </div>
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="group flex flex-col relative h-full"
+    >
+      <div className="w-full aspect-video relative z-10 -mb-2">
+        {hasVideo ? (
+          <>
+            <video
+              ref={lightVideoRef}
+              src={project.videoLight}
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 opacity-100 dark:opacity-0"
+            />
+
+            <video
+              ref={darkVideoRef}
+              src={project.videoDark}
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 opacity-0 dark:opacity-100"
+            />
+          </>
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-navy/30 dark:text-slate-600 font-mono text-sm px-4 text-center">
+              Нет видео
+            </span>
+          </div>
+        )}
+
+        {hasVideo && (
+          <div className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity flex items-center justify-center pointer-events-none z-20">
+            <span className="text-xs font-semibold tracking-wider uppercase bg-white/80 dark:bg-ansys-dark/80 px-3 py-1.5 rounded-md backdrop-blur-sm shadow-sm text-teal">
+              Наведите для анимации
+            </span>
+          </div>
+        )}
       </div>
 
-      <div className="p-6 flex flex-col flex-grow">
+      <div className="p-6 flex flex-col flex-grow relative z-0 bg-slate-50 dark:bg-ansys-card rounded-xl shadow-sm group-hover:shadow-lg group-hover:shadow-teal/40 dark:group-hover:shadow-teal/30 transition-all duration-300 border border-navy/5 dark:border-slate-700/50">
         <h3 className="text-xl font-bold mb-3 leading-tight dark:text-white transition-colors">
           {project.title}
         </h3>
@@ -24,11 +89,11 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.desc}
         </p>
 
-        <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-navy/5 dark:border-slate-700/50">
+        <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-navy/5 dark:border-slate-700/30">
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-slate-100 dark:bg-ansys-dark text-teal px-3 py-1.5 rounded-md text-xs font-semibold border border-transparent dark:border-slate-700/50"
+              className="bg-white/60 dark:bg-ansys-dark text-teal px-3 py-1.5 rounded-md text-xs font-semibold border border-transparent dark:border-slate-700/50 transition-colors"
             >
               {tag}
             </span>
