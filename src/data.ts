@@ -1,4 +1,6 @@
 import { Section, Document } from './types';
+import blenderVideoLight from './assets/videos/test_light_2.mp4';
+import blenderVideoDark from './assets/videos/test_dark_2.mp4';
 
 export const portfolioSections: Section[] = [
   {
@@ -9,7 +11,9 @@ export const portfolioSections: Section[] = [
         id: "blender",
         title: "Прочностной анализ ножа блендера",
         desc: "Оценка НДС при центробежных и гидродинамических нагрузках. Сетка с измельчением на режущих кромках. Использован материал 14Х17Н2.",
-        tags: ["Static Structural", "Non-linear"]
+        tags: ["Static Structural", "Non-linear"],
+        videoLight: blenderVideoLight,
+        videoDark: blenderVideoDark
       },
       {
         id: "amg3-frame",
