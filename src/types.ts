@@ -3,6 +3,8 @@ export interface Project {
   title: string;
   desc: string;
   tags: string[];
+  videoLight?: string;
+  videoDark?: string;
 }
 
 export interface Section {
